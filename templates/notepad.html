@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"
+        <title>RhymeWrite | Alpha Version</title>
+
+        <!--Javascript-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                crossorigin="anonymous"></script>
+
+        <!--Google Font-->
+
+        <script type="text/javascript">
+            $(document).ready(function (){
+                $("#lyrics-box").html("");
+                showLyric();
+            })
+
+            function saveLyric() {
+                let title = $("#lyric-title").val();
+                let genre = $("#lyric-genre").val();
+                let author = $("#lyric-author").val();
+                let text = $("#lyric-text").val();
+
+                if (title == "") {
+                    alert("제목을 입력해주세요")
+                    $("#lyric-title").focus()
+                    return
+                } else if (author == "") {
+                    alert("작성자를 입력해주세요")
+                    $("#lyric-author").focus()
+                    return
+                } else if (genre == "") {
+                    alert("장르를 입력해주세요")
+                    $("#lyric-genre").focus()
+                    return
+                } else if (text == "") {
+                    alert("본문을 입력해주세요")
+                    $("#lyric-text").focus()
+                    return
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "/lyric",
+                    data: {title_give: title, author_give: author, genre_give: genre, text_give: text},
+                    success: function(response) {
+                        if (response["result"]=="success") {
+                            window.location.reload();
+                        }
+                    }
+                });
+            }
+
+            function showLyric() {
+                $.ajax({
+                    type: "GET",
+                    url: "/lyric",
+                    data: {},
+                    success: function (response) {
+                        if (response['result'] == 'success') {
+                            let lyrics = response["lyrics"];
+                            for (let i = 0; i < lyrics.length; i++) {
+                                makeLyricRow(lyrics[i]["title"], lyrics[i]["author"], lyrics[i]["genre"], lyrics[i]["text"], lyrics[i]["id"]);
+                            }
+                        } else {
+                            alert("가사정보를 받아오지 못했습니다.")
+                        }
+                    }
+                });
+            }
+
+            function makeLyricRow(title, author, genre, text, id) {
+                let tempHtml = `<tr>\
+                                <td>${title}</td>
+                                <td>${author}</td>
+                                <td>${genre}</td>
+                                <td>${text}</td>
+                                <td><a href="#" onclick="deleteLyric('${id}')">삭제</a></td>
+                                <td><a href="/update/${id}">수정하기</a></td>
+                              </tr>`;
+
+                $("#lyrics-box").append(tempHtml);
+            }
+
+            function deleteLyric(id) {
+                $.ajax({
+                    type: "DELETE",
+                    url: `/lyric/${id}`,
+                    data: {}
+                })
+                window.location.reload();
+            }
+        </script>
+
+        <!--Google Font-->
+        <!--메모장 서식(표와 유사?)에 맞춰 가사에 킥(^)과 스네어(\)를 삽입한다.
+         저장 시에는 ^와 \로 태깅된 텍스트만 서버에 저장되도록 한다.-->
+
+        <style>
+
+            .title {
+                color: white;
+                width: 500px;
+                height: 400px;
+                background-image: url('https://static01.nyt.com/images/2019/10/15/arts/14rollingloud-1/merlin_162682848_3de3ce4f-97c4-499b-b53b-b6141bfd51a2-superJumbo.jpg?quality=90&auto=webp');
+                background-position: center;
+                background-size: cover;
+
+                border-radius: 10px;
+                text-align: center;
+                padding-top: 250px;
+            }
+
+            .wrap {
+                margin: 50px auto;
+                width: 300px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrap">
+            <div class="title">
+                <h1>RhymeWrite</h1>
+                <h5>Bust a rhyme!</h5>
+            </div>
+            <div>
+                <p>
+                    제목: <input id="lyric-title" , type="text"/>
+                </p>
+                <p>
+                    작성자: <input id="lyric-author" type="text"/>
+                </p>
+                <p>
+                    장르: <select id="lyric-genre" size="1">
+                    <option value="boombap">붐뱁</option>
+                    <option value="trap">트랩</option>
+                </select>
+                </p>
+                <p>
+                    가사: <textarea id="lyric-text" cols="50" rows="50" placeholder="가사를 입력해주세요"></textarea>
+                </p>
+            </div>
+            <div class="save">
+                <button onclick="saveLyric()" type="button" class="">저장하기</button>
+            </div>
+        </div>
+        <div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">제목</th>
+                    <th scope="col">작성자</th>
+                    <th scope="col">장르</th>
+                    <th scope="col">가사</th>
+                    <th scope="col">옵션</th>
+                </tr>
+                </thead>
+                <tbody id="lyrics-box">
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

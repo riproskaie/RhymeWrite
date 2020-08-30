@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"
+        <title>RhymeWrite | Alpha Version</title>
+
+        <!--Javascript-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                crossorigin="anonymous"></script>
+
+        <!--Google Font-->
+
+        <script type="text/javascript">
+            function saveLyric() {
+                let title = $("#lyric-title").val();
+                let genre = $("#lyric-genre").val();
+                let author = $("#lyric-author").val();
+                let text = $("#lyric-text").val();
+
+                if (title == "") {
+                    alert("제목을 입력해주세요")
+                    $("#lyric-title").focus()
+                    return
+                } else if (author == "") {
+                    alert("작성자를 입력해주세요")
+                    $("#lyric-author").focus()
+                    return
+                } else if (genre == "") {
+                    alert("장르를 입력해주세요")
+                    $("#lyric-genre").focus()
+                    return
+                } else if (text == "") {
+                    alert("본문을 입력해주세요")
+                    $("#lyric-text").focus()
+                    return
+                }
+
+                $.ajax({
+                    type: "PATCH",
+                    url: "/lyric/{{id}}",
+                    data: {title_give: title, author_give: author, genre_give: genre, text_give: text},
+                    success: function(response) {
+                        if (response["result"]=="success") {
+                            document.location.href="/";
+                        }
+                    }
+                });
+            }
+        </script>
+
+        <style>
+
+            .title {
+                color: white;
+                width: 500px;
+                height: 400px;
+                background-image: url('https://static01.nyt.com/images/2019/10/15/arts/14rollingloud-1/merlin_162682848_3de3ce4f-97c4-499b-b53b-b6141bfd51a2-superJumbo.jpg?quality=90&auto=webp');
+                background-position: center;
+                background-size: cover;
+
+                border-radius: 10px;
+                text-align: center;
+                padding-top: 250px;
+            }
+
+            .wrap {
+                margin: 50px auto;
+                width: 300px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrap">
+            <div>id는 오른쪽 보기 : {{id}}</div>
+            <div class="title">
+                <h1>RhymeWrite</h1>
+                <h5>Bust a rhyme!</h5>
+            </div>
+            <div>
+                <p>
+                    제목: <input id="lyric-title" , type="text"/>
+                </p>
+                <p>
+                    작성자: <input id="lyric-author" type="text"/>
+                </p>
+                <p>
+                    장르: <select id="lyric-genre" size="1">
+                    <option value="boombap">붐뱁</option>
+                    <option value="trap">트랩</option>
+                </select>
+                </p>
+                <p>
+                    가사: <textarea id="lyric-text" cols="50" rows="50" placeholder="가사를 입력해주세요"></textarea>
+                </p>
+            </div>
+            <div class="save">
+                <button onclick="saveLyric()" type="button" class="">저장하기</button>
+            </div>
+        </div>
+    </body>
+</html>
