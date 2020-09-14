@@ -1,21 +1,238 @@
 <!DOCTYPE html>
-<html lang="ko">
-
+<html>
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>RhymeWrite | Alpha Version</title>
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Gothic+A1:100,400" rel="stylesheet">
+        <style>
+            * {
+                font-family: 'Gothic A1';
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+                font-size: 0.875rem;
+                line-height: 1rem;
+                background-color: #d2d2d2;
+            }
+
+            .container-full {
+                width: 100%;
+                background-color: #fff;
+            }
+
+            .container {
+                max-width: 1150px;
+                margin: 0 auto;
+                background-color: #fff;
+                box-sizing: border-box;
+            }
+
+            header {
+                min-height: 80px;
+                padding: 10px 20px 0;
+            }
+
+            header a.logo {
+                float: left;
+                margin-top: 8px;
+            }
+
+            header a.logo img {
+                width: 50%;
+            }
+
+            header ul {
+                list-style: none;
+                float: right;
+            }
+
+            header ul li {
+                display: inline-block;
+            }
+
+            header ul li a {
+                text-decoration: none;
+                color: #3d3d3d;
+                padding: 0 5px;
+                margin: 0 10px;
+                width: 100px;
+            }
+
+            header ul li a:hover {
+                padding-bottom: 8px;
+                border-bottom: 3px solid #999;
+                color: #999;
+            }
+
+            .main-img {
+                height: 400px;
+                overflow: hidden;
+                background: url(https://i.imgur.com/VUcA09O.jpg) top center no-repeat;
+                background-position: center;
+                background-size: cover;
+            }
+
+            .text-box {
+                position: relative;
+                float: left;
+                left: 50px;
+                top: 150px;
+                padding: 10px 25px;
+                width: 45%;
+                background-color: rgba(255, 255, 255, 0.85);
+                border-radius: 8px;
+                font-size: 1rem;
+                line-height: 1.5rem;
+            }
+
+            .text-center {
+                text-align: center;
+            }
+
+            .ten_chars {
+                width: 10ch;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+
+            .row {
+                padding: 10px;
+                overflow: hidden;
+            }
+
+            .col-3 {
+                width: 33.3333333333%;
+                float: left;
+            }
+
+
+            .v200,
+            .v350 {
+                height: 200px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .v350 {
+                height: 350px;
+            }
+
+            .v200 h2,
+            .v350 h2 {
+                font-size: 1.85rem;
+                font-weight: normal;
+            }
+
+            .v200 p {
+                font-size: 1rem;
+                margin: 0;
+            }
+
+            .notepad-area {
+                padding-bottom: 1rem;
+            }
+
+            .save {
+                padding-bottom: 2rem;
+            }
+
+            .img-part figure .circle {
+                width: 200px;
+                height: 200px;
+                border-radius: 50%;
+                overflow: hidden;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .img-part figure img {
+                width: 300px;
+                overflow: hidden;
+            }
+
+            .img-part figcaption {
+                text-align: center;
+                margin-top: 10px;
+            }
+
+            table {
+                width: 100%;
+                border-top: 1px solid #444444;
+                border-collapse: collapse;
+            }
+
+            th, td {
+                border-bottom: 1px solid #444444;
+                padding: 10px;
+            }
+
+            footer {
+                padding: 20px 10px;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .footlogo {
+                padding-left: 10px;
+                padding-top: 15px;
+            }
+
+            footer ul {
+                list-style: none;
+            }
+
+            footer ul li {
+                display: inline-block;
+                padding-left: 15px;
+            }
+
+            footer ul li a {
+                text-decoration: none;
+                color: #999;
+            }
+
+            footer ul li a:hover {
+                color: orange;
+            }
+
+
+            .gray-back {
+                background-color: #f2f2f2;
+                padding: 50px 20px;
+                box-sizing: border-box;
+                overflow: hidden;
+                /*이거는 배경색상 적용 되지 않을 경우 */
+            }
+
+            ter ul li {
+                display: inline-block;
+                padding-left: 15px;
+            }
+
+            footer ul li a {
+                text-decoration: none;
+                color: #999;
+            }
+
+            footer ul li a:hover {
+                color: orange;
+            }
+        </style>
 
         <!--Javascript-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
                 integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
                 crossorigin="anonymous"></script>
-
-        <!--Google Font-->
-
         <script type="text/javascript">
-            $(document).ready(function (){
+            $(document).ready(function () {
                 $("#lyrics-box").html("");
                 showLyric();
             })
@@ -48,8 +265,8 @@
                     type: "POST",
                     url: "/lyric",
                     data: {title_give: title, author_give: author, genre_give: genre, text_give: text},
-                    success: function(response) {
-                        if (response["result"]=="success") {
+                    success: function (response) {
+                        if (response["result"] == "success") {
                             window.location.reload();
                         }
                     }
@@ -79,7 +296,7 @@
                                 <td>${title}</td>
                                 <td>${author}</td>
                                 <td>${genre}</td>
-                                <td>${text}</td>
+                                <td class="ten_chars">${text}</td>
                                 <td><a href="#" onclick="deleteLyric('${id}')">삭제</a></td>
                                 <td><a href="/update/${id}">수정하기</a></td>
                               </tr>`;
@@ -96,39 +313,41 @@
                 window.location.reload();
             }
         </script>
-
-        <!--Google Font-->
-        <!--메모장 서식(표와 유사?)에 맞춰 가사에 킥(^)과 스네어(\)를 삽입한다.
-         저장 시에는 ^와 \로 태깅된 텍스트만 서버에 저장되도록 한다.-->
-
-        <style>
-
-            .title {
-                color: white;
-                width: 500px;
-                height: 400px;
-                background-image: url('https://static01.nyt.com/images/2019/10/15/arts/14rollingloud-1/merlin_162682848_3de3ce4f-97c4-499b-b53b-b6141bfd51a2-superJumbo.jpg?quality=90&auto=webp');
-                background-position: center;
-                background-size: cover;
-
-                border-radius: 10px;
-                text-align: center;
-                padding-top: 250px;
-            }
-
-            .wrap {
-                margin: 50px auto;
-                width: 300px;
-            }
-        </style>
     </head>
+
     <body>
-        <div class="wrap">
-            <div class="title">
-                <h1>RhymeWrite</h1>
-                <h5>Bust a rhyme!</h5>
+        <header class="container">
+            <a href="#" class="logo">
+                <img src="https://i.imgur.com/owpIlnd.png" alt="로고">
+            </a>
+            <ul>
+                <li>
+                    <a href="#">홈으로</a>
+                </li>
+                <li>
+                    <a href="#">각운 사전</a>
+                </li>
+                <li>
+                    <a href="#">유의어 사전</a>
+                </li>
+                <li>
+                    <a href="#">유행어 사전</a>
+                </li>
+            </ul>
+        </header>
+        <article class="container main-img">
+            <div class="text-box text-center">
+                <h2>Welcome to RhymeWrite!</h2>
+                <p>Bust a rhyme. Spread your message.</p>
             </div>
-            <div>
+        </article>
+        <article class="container">
+            <div class="v200 text-center">
+                <h2>나만의 라임 메모장</h2>
+                <p>여기에 가사를 쓰고 저장하세요.</p>
+                <p>특수문자: 호흡(*), 킥(_), 하이햇(^), 스네어(\)</p>
+            </div>
+            <div class="notepad-area text-center">
                 <p>
                     제목: <input id="lyric-title" , type="text"/>
                 </p>
@@ -142,27 +361,75 @@
                 </select>
                 </p>
                 <p>
-                    가사: <textarea id="lyric-text" cols="50" rows="50" placeholder="가사를 입력해주세요"></textarea>
+                    <textarea id="lyric-text" cols="50" rows="20" placeholder="가사를 입력해주세요"></textarea>
                 </p>
             </div>
-            <div class="save">
+            <div class="save text-center">
                 <button onclick="saveLyric()" type="button" class="">저장하기</button>
             </div>
-        </div>
-        <div>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">제목</th>
-                    <th scope="col">작성자</th>
-                    <th scope="col">장르</th>
-                    <th scope="col">가사</th>
-                    <th scope="col">옵션</th>
-                </tr>
-                </thead>
-                <tbody id="lyrics-box">
-                </tbody>
-            </table>
-        </div>
+        </article>
+        <article class="container gray-back">
+            <div class="text-center">
+                <h1>내 가사 목록</h1>
+                <p>저장된 가사는 여기에 표시됩니다.</p>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">제목</th>
+                        <th scope="col">작성자</th>
+                        <th scope="col">장르</th>
+                        <th scope="col">가사</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody id="lyrics-box">
+                    </tbody>
+                </table>
+            </div>
+        </article>
+        <article class="container">
+            <div class="row img-part">
+                <div class="col-3">
+                    <figure>
+                        <div class="circle">
+                            <img src="https://i.imgur.com/AQ9QUeq.jpg" alt="사진 1">
+                        </div>
+                        <figcaption>
+                            <h3>나만의 가사 메모장</h3>
+                            <p>가사를 쓰고 관리하세요.</p>
+                        </figcaption>
+                    </figure>
+                </div>
+                <div class="col-3">
+                    <figure>
+                        <div class="circle">
+                            <img src="https://i.imgur.com/5aBzd1K.jpg" alt="사진 2">
+                        </div>
+                        <figcaption>
+                            <h3>유의어/신조어 사전</h3>
+                            <p>무슨 단어를 쓸지 막막할 때마다 찾아보세요.</p>
+                        </figcaption>
+                    </figure>
+                </div>
+                <div class="col-3">
+                    <figure>
+                        <div class="circle">
+                            <img src="https://i.imgur.com/AEBivPT.jpg" alt="사진 3">
+                        </div>
+                        <figcaption>
+                            <h3>각운 사전</h3>
+                            <p>각운이 맞는 한국어/영어 단어를 찾아보세요.</p>
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+            </div>
+        </article>
+        <footer class="container">
+            <div class="footlogo">@2020 Yunjae Lee</div>
+        </footer>
     </body>
+
 </html>
+
